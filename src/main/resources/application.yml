@@ -1,1 +1,28 @@
+server:
+  port: 8086
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/postgres?currentSchema=monitor_sensors_schema
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
 
+schedulers:
+  sensors:
+    enabled: true
+    statistics:
+      every_day_2_am_cron: "0 0 2 * * *"
+      zone: "Europe/Moscow"
+
+open:
+  feign:
+    host: ${FEIGN_HOST}
+    username: ${FEIGN_USERNAME}
+    password: ${FEIGN_PASSWORD}
